@@ -151,7 +151,3 @@ namespace UnionFind;
 </div>
 </body>
 </html>
-
-
-
-

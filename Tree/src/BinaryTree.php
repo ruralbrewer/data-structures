@@ -10,6 +10,11 @@ class BinaryTree
      */
     private $root = null;
 
+    public function root(): Node
+    {
+        return $this->root;
+    }
+
     public function insert(Node $node)
     {
         if (is_null($this->root)) {
@@ -25,6 +30,9 @@ class BinaryTree
         if ($node->equals($parent)) {
             return;
         }
+
+        $node->incrementLevel();
+
         if ($node->greaterThan($parent)) {
             if ($parent->hasRight()) {
                 $this->insertInNode($node, $parent->right());
@@ -46,27 +54,27 @@ class BinaryTree
     /**
      * @throws TreeException
      */
-    public function find(Node $integer, Node $parent = null): Node
+    public function find(Node $node, Node $parent = null): Node
     {
         if (is_null($parent)) {
             $parent = $this->root;
         }
 
-        if ($integer->equals($parent)) {
+        if ($node->equals($parent)) {
             return $parent;
         }
 
-        if ($integer->greaterThan($parent)) {
+        if ($node->greaterThan($parent)) {
             if (!$parent->hasRight()) {
                 throw new TreeException("Not Found");
             }
-            return $this->find($integer, $parent->right());
+            return $this->find($node, $parent->right());
         }
         else {
             if (!$parent->hasLeft()) {
                 throw new TreeException("Not Found");
             }
-            return $this->find($integer, $parent->left());
+            return $this->find($node, $parent->left());
         }
     }
 

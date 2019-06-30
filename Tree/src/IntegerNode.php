@@ -5,17 +5,23 @@ namespace Tree;
 
 class IntegerNode implements Node
 {
-    public $data;
+    private $data;
 
     /**
      * @var Node
      */
-    public $leftChild = null;
+    private $leftChild = null;
 
     /**
      * @var Node
      */
-    public $rightChild = null;
+    private $rightChild = null;
+
+    /**
+     * @var int
+     */
+    private $level = 1;
+
 
     public function __construct($data)
     {
@@ -72,6 +78,16 @@ class IntegerNode implements Node
     public function equals(Node $other): bool
     {
         return ($this->data() === $other->data());
+    }
+
+    public function incrementLevel()
+    {
+        $this->level++;
+    }
+
+    public function level(): int
+    {
+        return $this->level;
     }
 
     public function asArray(): array
