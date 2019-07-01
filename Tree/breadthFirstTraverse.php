@@ -47,7 +47,7 @@ function breadthFirstPrint(Node $node)
     }
 }
 
-breadthFirstPrint($tree->root());
+depthFirstPreOrderPrint($tree->root());
 
 $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
 echo "\n\nThis process took $executionTime seconds\n";
