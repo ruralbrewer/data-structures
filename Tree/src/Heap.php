@@ -77,6 +77,11 @@ class Heap
         return $this->removeAt(0);
     }
 
+    public function isEmpty(): bool
+    {
+        return $this->size === 0;
+    }
+
     public function has(int $integer): bool
     {
         if ($this->withMap) {
@@ -89,7 +94,7 @@ class Heap
     /**
      * @throws TreeException
      */
-    public function find(int $integer)
+    public function find(int $integer): int
     {
         if (!$this->has($integer)) {
             throw new TreeException(sprintf("%d does not exist in heap.", $integer));
@@ -104,17 +109,14 @@ class Heap
         return $this->heap[$index];
     }
 
-    public function isEmpty()
+    public function add(int $integer)
     {
-        return $this->size === 0;
-    }
-
-    private function compare($node1, $node2): bool
-    {
-        if ($this->isMax) {
-            return ($this->heap[$node1] < $this->heap[$node2]);
+        array_push($this->heap, $integer);
+        if ($this->withMap) {
+            $this->addToMap($integer, $this->size);
         }
-        return ($this->heap[$node1] > $this->heap[$node2]);
+        $this->swim($this->size);
+        $this->size++;
     }
 
     public function sink(int $index)
@@ -164,6 +166,14 @@ class Heap
         }
     }
 
+    private function compare($node1, $node2): bool
+    {
+        if ($this->isMax) {
+            return ($this->heap[$node1] < $this->heap[$node2]);
+        }
+        return ($this->heap[$node1] > $this->heap[$node2]);
+    }
+
     private function addToMap($key, $indexValue) {
         $this->map[$key] = [$indexValue];
     }
@@ -176,21 +186,6 @@ class Heap
     {
         $this->map[$key] = array_diff($this->map[$key], [$oldValue]);
         $this->map[$key][] = $newValue;
-    }
-
-    public function asArray()
-    {
-        return $this->heap;
-    }
-
-    public function add(int $integer)
-    {
-        array_push($this->heap, $integer);
-        if ($this->withMap) {
-            $this->addToMap($integer, $this->size);
-        }
-        $this->swim($this->size);
-        $this->size++;
     }
 
     /**
@@ -226,8 +221,8 @@ class Heap
         return $value;
     }
 
-    public function map()
+    public function asArray()
     {
-        return $this->map;
+        return $this->heap;
     }
 }
