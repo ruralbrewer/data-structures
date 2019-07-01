@@ -3,8 +3,10 @@
 <?php
 
 use Tree\BinaryTree;
+use Tree\DepthFirstTraverseOrder;
 use Tree\IntegerNode;
 use Tree\TreeException;
+use Tree\TreeTraverser;
 
 require './vendor/autoload.php';
 
@@ -25,15 +27,15 @@ foreach ($list as $value) {
 
 try {
     $found = $tree->find(new IntegerNode(14));
-    echo "Found: " . $found->data() . " at level: " . $found->level() . "\n";
+    echo "Found: " . $found->data() . " at level: " . $found->level() . "\n\n";
 
     $notFound = $tree->find(new IntegerNode(99));
 }
 catch(TreeException $exception) {
-    echo $exception->getMessage();
+    echo $exception->getMessage() . "\n\n";
 }
 
-var_dump($tree->asArray());
+TreeTraverser::depthFirstTraverse($tree->root(), DepthFirstTraverseOrder::inOrder());
 
 $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
 echo "\n\nThis process took $executionTime seconds\n";

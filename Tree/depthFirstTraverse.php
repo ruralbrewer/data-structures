@@ -3,8 +3,9 @@
 <?php
 
 use Tree\BinaryTree;
+use Tree\DepthFirstTraverseOrder;
 use Tree\IntegerNode;
-use Tree\Node;
+use Tree\TreeTraverser;
 
 require './vendor/autoload.php';
 
@@ -19,44 +20,7 @@ foreach ($list as $value) {
     $tree->insert($node);
 }
 
-class TreeTraverser
-{
-    public const TRAVERSE_PRE_ORDER = 1;
-    public const TRAVERSE_IN_ORDER = 2;
-    public const TRAVERSE_POST_ORDER = 3;
-
-    public static function depthFirstTraverse(Node $node, $order = self::TRAVERSE_PRE_ORDER)
-    {
-        if ($order === self::TRAVERSE_PRE_ORDER) {
-            self::visit($node);
-        }
-
-        if ($node->hasLeft()) {
-            self::depthFirstTraverse($node->left(), $order);
-        }
-
-        if ($order === self::TRAVERSE_IN_ORDER) {
-            self::visit($node);
-        }
-
-        if ($node->hasRight()) {
-            self::depthFirstTraverse($node->right(), $order);
-        }
-
-        if ($order === self::TRAVERSE_POST_ORDER) {
-            self::visit($node);
-        }
-    }
-
-    private static function visit(Node $node)
-    {
-        // Here we are simply printing,
-        // but visitation could mean many things.
-        echo $node->data() . ",";
-    }
-}
-
-TreeTraverser::depthFirstTraverse($tree->root(), TreeTraverser::TRAVERSE_IN_ORDER);
+TreeTraverser::depthFirstTraverse($tree->root(), DepthFirstTraverseOrder::inOrder());
 
 $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
 echo "\n\nThis process took $executionTime seconds\n";
