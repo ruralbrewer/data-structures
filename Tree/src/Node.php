@@ -34,5 +34,10 @@ interface Node
     public function level(): int;
 
 
+    public function setVisited();
+
+    public function visited(): bool;
+
+
     public function asArray(): array;
 }

@@ -22,6 +22,11 @@ class IntegerNode implements Node
      */
     private $level = 1;
 
+    /**
+     * @var bool
+     */
+    private $visited = false;
+
 
     public function __construct($data)
     {
@@ -88,6 +93,16 @@ class IntegerNode implements Node
     public function level(): int
     {
         return $this->level;
+    }
+
+    public function setVisited()
+    {
+        $this->visited = true;
+    }
+
+    public function visited(): bool
+    {
+        return $this->visited;
     }
 
     public function asArray(): array
