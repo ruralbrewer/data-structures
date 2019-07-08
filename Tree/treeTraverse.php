@@ -8,7 +8,7 @@ use Tree\TreeTraverser;
 
 require './vendor/autoload.php';
 
-function getTree()
+function getTree(): BinaryTree
 {
     $list = [
         16, 8, 24, 4, 12, 20 , 28, 2, 6, 10, 14, 18, 22, 26, 30, 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29, 31

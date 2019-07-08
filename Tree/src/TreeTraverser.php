@@ -168,7 +168,7 @@ class TreeTraverser
         $node->setVisited();
     }
 
-    private static function nextLevel(Node $currentNode)
+    private static function nextLevel(Node $node)
     {
         // And again. Silly, I know.
         echo "\n";
