@@ -7,10 +7,7 @@ interface StateEvaluator
 {
     public function setIsMaximizing(bool $isMaximizing): void;
 
-    /**
-     * Method to assign a (min/max) weight to the current state.
-     */
     public function evaluate(State $state): int;
 
-    public function getPossibleMoves(State $state): NodeCollection;
+    public function getPossibleEvents(State $state): StateChangeEventCollection;
 }

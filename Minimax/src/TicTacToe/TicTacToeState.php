@@ -6,6 +6,7 @@ namespace Minimax\TicTacToe;
 use Minimax\Node;
 use Minimax\NodeCollection;
 use Minimax\State;
+use Minimax\StateChangeEvent;
 
 class TicTacToeState implements State
 {
@@ -47,6 +48,11 @@ class TicTacToeState implements State
         $this->setGrid($nodes);
     }
 
+
+    public function setIsMaximizing(bool $isMaximizing): void
+    {
+        $this->isMaximizing = $isMaximizing;
+    }
 
     /**
      * @return array
@@ -92,51 +98,21 @@ class TicTacToeState implements State
         return true;
     }
 
-    public function updateState(Node $node): void
+    public function doStateChange(StateChangeEvent $event): void
     {
-        $this->nodes->nodeAtKey($node->name())->setValue($node->value());
+        /**
+         * @var TicTacToeMove $event
+         */
+        $this->nodes->nodeAtKey($event->node()->name())->setValue($event->value());
     }
 
-    public function resetState(Node $node): void
+
+    public function undoStateChange(StateChangeEvent $event): void
     {
-        $this->nodes->nodeAtKey($node->name())->setValue($this->emptyNodeValue());
-    }
-
-    /**
-     * Method to return the default (empty) value for a node.
-     *
-     * @return mixed
-     */
-    public function emptyNodeValue()
-    {
-        return '';
-    }
-
-    private function setGrid(NodeCollection $nodes): void
-    {
-        $row = 0;
-
-        foreach ($nodes->iterator() as $index => $node) {
-
-            $this->rows[$row][] = $node;
-
-            if (($index + 1) % 3 === 0) {
-                $row++;
-            }
-
-            $column = ($index % 3) + 1;
-
-            $this->columns[$column][] = $node;
-
-            if ($index % 4 === 0) {
-                $this->diagonals[0][] = $node;
-            }
-
-            if ($index % 2 === 0 && $index != 0 && $index != 8) {
-                $this->diagonals[1][] = $node;
-            }
-
-        }
+        /**
+         * @var TicTacToeMove $event
+         */
+        $this->nodes->nodeAtKey($event->node()->name())->setValue('');
     }
 
     public function rows(): array
@@ -171,7 +147,7 @@ class TicTacToeState implements State
         }
     }
 
-    private function checkForWinner(array $nodes, string $type, int $index): bool
+    private function checkForWinner(array $nodes): bool
     {
         $winner = $nodes[0]->value();
 
@@ -181,13 +157,36 @@ class TicTacToeState implements State
             }
         }
 
-
         $this->winner = $winner;
 
-//        echo "WINNER {$winner}: {$type} - {$index} Score: {$this->score()}\n";
-
-
         return true;
+    }
+
+    private function setGrid(NodeCollection $nodes): void
+    {
+        $row = 0;
+
+        foreach ($nodes->iterator() as $index => $node) {
+
+            $this->rows[$row][] = $node;
+
+            if (($index + 1) % 3 === 0) {
+                $row++;
+            }
+
+            $column = ($index % 3) + 1;
+
+            $this->columns[$column][] = $node;
+
+            if ($index % 4 === 0) {
+                $this->diagonals[0][] = $node;
+            }
+
+            if ($index % 2 === 0 && $index != 0 && $index != 8) {
+                $this->diagonals[1][] = $node;
+            }
+
+        }
     }
 
     public function dumpState()
@@ -198,10 +197,5 @@ class TicTacToeState implements State
                 echo "\n";
             }
         }
-    }
-
-    public function setIsMaximizing(bool $isMaximizing): void
-    {
-        $this->isMaximizing = $isMaximizing;
     }
 }

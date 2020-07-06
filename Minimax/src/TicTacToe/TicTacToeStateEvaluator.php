@@ -5,14 +5,16 @@ namespace Minimax\TicTacToe;
 
 use Minimax\NodeCollection;
 use Minimax\State;
+use Minimax\StateChangeEvent;
+use Minimax\StateChangeEventCollection;
 use Minimax\StateEvaluator;
 
 class TicTacToeStateEvaluator implements StateEvaluator
 {
     /**
-     * @var NodeCollection
+     * @var StateChangeEventCollection
      */
-    private $nodes;
+    private $events;
 
     /**
      * @var bool
@@ -20,9 +22,14 @@ class TicTacToeStateEvaluator implements StateEvaluator
     private $isMaximizing;
 
 
-    public function __construct(NodeCollection $nodes)
+    public function __construct(StateChangeEventCollection $nodes)
     {
-        $this->nodes = $nodes;
+        $this->events = $nodes;
+    }
+
+    public function setIsMaximizing(bool $isMaximizing): void
+    {
+        $this->isMaximizing = $isMaximizing;
     }
 
     /**
@@ -33,27 +40,21 @@ class TicTacToeStateEvaluator implements StateEvaluator
         return $state->score();
     }
 
-    public function getPossibleMoves(State $state): NodeCollection
+    public function getPossibleEvents(State $state): StateChangeEventCollection
     {
-        $this->nodes->clear();
+        $this->events->clear();
 
         $value = ($this->isMaximizing) ? 'X' : 'O';
 
         foreach($state->nodes()->iterator() as $node) {
 
             if ($node->isEmpty()) {
-                $move = clone $node;
-                $move->setValue($value);
-                $this->nodes->addNode($move);
+                $move = new TicTacToeMove($node, $value);
+                $this->events->addEvent($move);
             }
 
         }
 
-        return $this->nodes;
-    }
-
-    public function setIsMaximizing(bool $isMaximizing): void
-    {
-        $this->isMaximizing = $isMaximizing;
+        return $this->events;
     }
 }

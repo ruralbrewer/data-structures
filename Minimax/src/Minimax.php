@@ -27,53 +27,50 @@ class Minimax
     ) {
         $this->count++;
 
-        $move = null;
+        $bestEvent = null;
 
         $this->stateEvaluator->setIsMaximizing($isMaximizing);
 
         if ($state->isTermination()) {
 
-            $modifier = ($isMaximizing) ? -$depth : $depth;
-            $score = $state->score() + $modifier;
-
             return [
-                'score' => $score,
-                'move' => $move
+                'score' => $state->score(),
+                'event' => $bestEvent
             ];
         }
 
-        $best = ($isMaximizing) ? -INF : INF;
+        $bestScore = ($isMaximizing) ? -INF : INF;
 
-        foreach ($this->stateEvaluator->getPossibleMoves($state)->iterator() as $node) {
+        foreach ($this->stateEvaluator->getPossibleEvents($state)->iterator() as $event) {
 
             if ($beta <= $alpha) {
                 break;
             }
 
-            $state->updateState($node);
+            $state->doStateChange($event);
 
             $evaluation = $this->evaluate($state, $depth + 1, !$isMaximizing, $alpha, $beta);
 
-            if ($isMaximizing && $evaluation['score'] > $best) {
+            if ($isMaximizing && $evaluation['score'] > $bestScore) {
 
-                $best = $evaluation['score'];
-                $alpha = $best;
-                $move = $node;
+                $bestScore = $evaluation['score'];
+                $alpha = $bestScore;
+                $bestEvent = $event;
 
-            } else if (!$isMaximizing && $evaluation['score'] < $best) {
+            } else if (!$isMaximizing && $evaluation['score'] < $bestScore) {
 
-                $best = $evaluation['score'];
-                $beta = $best;
-                $move = $node;
+                $bestScore = $evaluation['score'];
+                $beta = $bestScore;
+                $bestEvent = $event;
 
             }
 
-            $state->resetState($node);
+            $state->undoStateChange($event);
         }
 
         return [
-            'score' => $best,
-            'move' => $move
+            'score' => $bestScore,
+            'event' => $bestEvent
         ];
     }
 

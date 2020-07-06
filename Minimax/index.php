@@ -10,7 +10,7 @@ namespace Minimax;
 
 $nodeValues = [
     '', '', '',
-    '', 'X', '',
+    'X', '', '',
     '', '', ''
 ];
 
@@ -30,7 +30,7 @@ $nodes = NodeCollection::fromArray($nodeValues);
 
 $state = new TicTacToeState($nodes);
 
-$stateEvaluator = new TicTacToeStateEvaluator(new NodeCollection());
+$stateEvaluator = new TicTacToeStateEvaluator(new StateChangeEventCollection());
 
 $ai = new Minimax($stateEvaluator);
 
@@ -42,8 +42,8 @@ while (!$state->isTermination()) {
 
     $evaluation = $ai->evaluate($state, 0, $isMaximizing);
 
-    if ($evaluation['move']) {
-        $state->updateState($evaluation['move']);
+    if ($evaluation['event']) {
+        $state->doStateChange($evaluation['event']);
     }
 
     $state->dumpState();

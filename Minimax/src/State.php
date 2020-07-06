@@ -9,23 +9,11 @@ interface State
 
     public function nodes(): NodeCollection;
 
-    /**
-     * Method to determine if this is the end.
-     *
-     * @return bool
-     */
     public function isTermination(): bool;
 
-    public function updateState(Node $node): void;
+    public function doStateChange(StateChangeEvent $event): void;
 
-    public function resetState(Node $node): void;
-
-    /**
-     * Method to return the default (empty) value for a node.
-     *
-     * @return mixed
-     */
-    public function emptyNodeValue();
+    public function undoStateChange(StateChangeEvent $event): void;
 
     public function winner(): string;
 
