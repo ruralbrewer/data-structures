@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace Minimax\TicTacToe;
 
-use Minimax\NodeCollection;
-use Minimax\State;
-use Minimax\StateChangeEvent;
-use Minimax\StateChangeEventCollection;
-use Minimax\StateEvaluator;
+use Minimax\State\Event\StateChangeEventCollection;
+use Minimax\State\State;
+use Minimax\State\StateEvaluator;
 
 class TicTacToeStateEvaluator implements StateEvaluator
 {

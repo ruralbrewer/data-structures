@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Minimax;
+namespace Minimax\State;
+
+use Minimax\State\Event\StateChangeEventCollection;
 
 interface StateEvaluator
 {

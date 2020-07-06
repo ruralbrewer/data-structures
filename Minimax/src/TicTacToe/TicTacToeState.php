@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Minimax\TicTacToe;
 
-use Minimax\Node;
-use Minimax\NodeCollection;
-use Minimax\State;
-use Minimax\StateChangeEvent;
+use Minimax\State\Event\StateChangeEvent;
+use Minimax\State\Node\NodeCollection;
+use Minimax\State\State;
 
 class TicTacToeState implements State
 {
@@ -72,19 +71,19 @@ class TicTacToeState implements State
         $this->winner = '';
 
         foreach ($this->rows as $index => $row) {
-            if ($this->checkForWinner($row, 'row', $index)) {
+            if ($this->checkForWinner($row)) {
                 return true;
             }
         }
 
         foreach ($this->columns as $index => $column) {
-            if ($this->checkForWinner($column, 'column', $index)) {
+            if ($this->checkForWinner($column)) {
                 return true;
             }
         }
 
         foreach ($this->diagonals as $index => $diagonal) {
-            if ($this->checkForWinner($diagonal, 'diagonal', $index)) {
+            if ($this->checkForWinner($diagonal)) {
                 return true;
             }
         }

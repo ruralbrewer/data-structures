@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Minimax;
 
+use Minimax\State\State;
+use Minimax\State\StateEvaluator;
+
 class Minimax
 {
     /**

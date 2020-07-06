@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Minimax;
+namespace Minimax\State;
+
+use Minimax\State\Event\StateChangeEvent;
+use Minimax\State\Node\NodeCollection;
 
 interface State
 {

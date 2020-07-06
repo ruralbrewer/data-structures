@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Minimax\TicTacToe;
 
-use Minimax\Node;
-use Minimax\StateChangeEvent;
+use Minimax\State\Event\StateChangeEvent;
+use Minimax\State\Node\Node;
 
 class TicTacToeMove implements StateChangeEvent
 {

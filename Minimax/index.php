@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Minimax;
 
+    use Minimax\State\Event\StateChangeEventCollection;
+    use Minimax\State\Node\NodeCollection;
     use Minimax\TicTacToe\TicTacToeState;
     use Minimax\TicTacToe\TicTacToeStateEvaluator;
 
