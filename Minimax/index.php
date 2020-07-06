@@ -9,7 +9,7 @@ require './vendor/autoload.php';
 
 $nodeValues = [
     '', '', '',
-    '', 'X', '',
+    '', '', 'X',
     '', '', ''
 ];
 
@@ -22,6 +22,8 @@ foreach ($nodeValues as $value) {
 }
 
 $isMaximizing = ($emptyValues % 2 === 0);
+
+$start = microtime(true);
 
 $nodes = NodeCollection::fromArray($nodeValues);
 
@@ -46,7 +48,9 @@ while (!$state->isTermination()) {
     echo "\n";
 }
 
+echo "Winner: " . $state->winner() . "\n";
 echo "Total: " . $ai->count() . "\n";
+echo "Total Time : " . (microtime(true) - $start) . "\n";
 
 
 

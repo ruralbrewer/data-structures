@@ -16,6 +16,8 @@ class Minimax
     ) {
         $this->count++;
 
+        $move = null;
+
         if ($state->isTermination()) {
 
             $modifier = ($isMaximizing) ? -$depth : $depth;
@@ -23,11 +25,9 @@ class Minimax
 
             return [
                 'score' => $score,
-                'move' => null
+                'move' => $move
             ];
         }
-
-        $move = null;
 
         $best = ($isMaximizing) ? -INF : INF;
 
@@ -36,7 +36,7 @@ class Minimax
             if (empty($node->value())) {
 
                 if ($beta <= $alpha) {
-                    continue;
+                    break;
                 }
 
                 $node->setValue($state->currentNodeValue($isMaximizing));
