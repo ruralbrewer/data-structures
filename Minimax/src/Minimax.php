@@ -5,7 +5,18 @@ namespace Minimax;
 
 class Minimax
 {
+    /**
+     * @var StateEvaluator
+     */
+    private $stateEvaluator;
+
     private $count = 0;
+
+
+    public function __construct(StateEvaluator $stateEvaluator)
+    {
+        $this->stateEvaluator = $stateEvaluator;
+    }
 
     public function evaluate(
         State $state,
@@ -17,6 +28,8 @@ class Minimax
         $this->count++;
 
         $move = null;
+
+        $this->stateEvaluator->setIsMaximizing($isMaximizing);
 
         if ($state->isTermination()) {
 
@@ -31,33 +44,31 @@ class Minimax
 
         $best = ($isMaximizing) ? -INF : INF;
 
-        foreach ($state->nodes()->iterator() as $index => $node) {
+        foreach ($this->stateEvaluator->getPossibleMoves($state)->iterator() as $node) {
 
-            if (empty($node->value())) {
-
-                if ($beta <= $alpha) {
-                    break;
-                }
-
-                $node->setValue($state->currentNodeValue($isMaximizing));
-                $evaluation = $this->evaluate($state, $depth + 1, !$isMaximizing, $alpha, $beta);
-
-                if ($isMaximizing && $evaluation['score'] > $best) {
-
-                    $best = $evaluation['score'];
-                    $alpha = $best;
-                    $move = $node;
-
-                } else if (!$isMaximizing && $evaluation['score'] < $best) {
-
-                    $best = $evaluation['score'];
-                    $beta = $best;
-                    $move = $node;
-
-                }
-
-                $node->setValue($state->emptyNodeValue());
+            if ($beta <= $alpha) {
+                break;
             }
+
+            $state->updateState($node);
+
+            $evaluation = $this->evaluate($state, $depth + 1, !$isMaximizing, $alpha, $beta);
+
+            if ($isMaximizing && $evaluation['score'] > $best) {
+
+                $best = $evaluation['score'];
+                $alpha = $best;
+                $move = $node;
+
+            } else if (!$isMaximizing && $evaluation['score'] < $best) {
+
+                $best = $evaluation['score'];
+                $beta = $best;
+                $move = $node;
+
+            }
+
+            $state->resetState($node);
         }
 
         return [

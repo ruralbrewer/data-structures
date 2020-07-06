@@ -15,8 +15,8 @@ class NodeCollection
     {
         $collection = new self;
 
-        foreach ($nodeValues as $value) {
-            $collection->addNode(new Node($value));
+        foreach ($nodeValues as $key => $value) {
+            $collection->addNode(new Node($key, $value));
         }
 
         return $collection;
@@ -24,9 +24,27 @@ class NodeCollection
 
     public function addNode(Node $node)
     {
-        $this->nodes[] = $node;
+        $this->nodes[$node->name()] = $node;
     }
 
+    public function hasNodeAtKey($key)
+    {
+        return isset($this->nodes[$key]);
+    }
+
+    public function nodeAtKey($key): Node
+    {
+        if (!$this->hasNodeAtKey($key)) {
+            throw new \OutOfBoundsException('Key does not exist');
+        }
+
+        return $this->nodes[$key];
+    }
+
+    public function clear()
+    {
+        $this->nodes = [];
+    }
 
     public function iterator(): \ArrayIterator
     {

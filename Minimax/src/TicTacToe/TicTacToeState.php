@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Minimax\TicTacToe;
 
+use Minimax\Node;
 use Minimax\NodeCollection;
 use Minimax\State;
 
@@ -32,6 +33,11 @@ class TicTacToeState implements State
      * @var string
      */
     private $winner;
+
+    /**
+     * @var bool
+     */
+    private $isMaximizing;
 
 
     public function __construct(NodeCollection $nodes)
@@ -86,14 +92,14 @@ class TicTacToeState implements State
         return true;
     }
 
-    /**
-     * Method to return the current value to be used.
-     *
-     * @return mixed
-     */
-    public function currentNodeValue(bool $isMaximizing)
+    public function updateState(Node $node): void
     {
-        return ($isMaximizing) ? 'X' : 'O';
+        $this->nodes->nodeAtKey($node->name())->setValue($node->value());
+    }
+
+    public function resetState(Node $node): void
+    {
+        $this->nodes->nodeAtKey($node->name())->setValue($this->emptyNodeValue());
     }
 
     /**
@@ -192,5 +198,10 @@ class TicTacToeState implements State
                 echo "\n";
             }
         }
+    }
+
+    public function setIsMaximizing(bool $isMaximizing): void
+    {
+        $this->isMaximizing = $isMaximizing;
     }
 }

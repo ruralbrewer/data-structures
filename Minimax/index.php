@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace Minimax;
 
     use Minimax\TicTacToe\TicTacToeState;
+    use Minimax\TicTacToe\TicTacToeStateEvaluator;
 
-require './vendor/autoload.php';
+    require './vendor/autoload.php';
 
 $nodeValues = [
     '', '', '',
-    '', '', 'X',
+    '', 'X', '',
     '', '', ''
 ];
 
@@ -29,7 +30,9 @@ $nodes = NodeCollection::fromArray($nodeValues);
 
 $state = new TicTacToeState($nodes);
 
-$ai = new Minimax();
+$stateEvaluator = new TicTacToeStateEvaluator(new NodeCollection());
+
+$ai = new Minimax($stateEvaluator);
 
 while (!$state->isTermination()) {
 
@@ -40,7 +43,7 @@ while (!$state->isTermination()) {
     $evaluation = $ai->evaluate($state, 0, $isMaximizing);
 
     if ($evaluation['move']) {
-        ($evaluation['move'])->setValue($state->currentNodeValue($isMaximizing));
+        $state->updateState($evaluation['move']);
     }
 
     $state->dumpState();

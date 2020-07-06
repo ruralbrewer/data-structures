@@ -5,6 +5,7 @@ namespace Minimax;
 
 interface State
 {
+    public function setIsMaximizing(bool $isMaximizing): void;
 
     public function nodes(): NodeCollection;
 
@@ -15,12 +16,9 @@ interface State
      */
     public function isTermination(): bool;
 
-    /**
-     * Method to return the value to be used for a given turn.
-     *
-     * @return mixed
-     */
-    public function currentNodeValue(bool $isMaximizing);
+    public function updateState(Node $node): void;
+
+    public function resetState(Node $node): void;
 
     /**
      * Method to return the default (empty) value for a node.
